@@ -1,0 +1,111 @@
+@{
+    ViewData["Title"] = "AJAX Sandbox";
+}
+
+<div class="container mt-4">
+    <h2>🔄 AJAX Sandbox</h2>
+    <p class="text-muted">Experiment with AJAX calls and dynamic content</p>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header">
+                    AJAX Form Example
+                </div>
+                <div class="card-body">
+                    <form id="ajaxForm">
+                        <div class="mb-3">
+                            <label for="dataInput" class="form-label">Enter some data:</label>
+                            <input type="text" class="form-control" id="dataInput" placeholder="Type something...">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send via AJAX</button>
+                    </form>
+                    
+                    <div id="result" class="mt-3"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    Dynamic Content Loading
+                </div>
+                <div class="card-body">
+                    <button id="loadContent" class="btn btn-success">Load Dynamic Content</button>
+                    <div id="dynamicContent" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <strong>AJAX Features</strong>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">✓ Fetch API</li>
+                    <li class="list-group-item">✓ POST requests</li>
+                    <li class="list-group-item">✓ JSON handling</li>
+                    <li class="list-group-item">✓ Dynamic updates</li>
+                    <li class="list-group-item">✓ No page refresh</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-link">← Back to Sandbox Home</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // AJAX Form Submission
+        document.getElementById('ajaxForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const dataInput = document.getElementById('dataInput').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const response = await fetch('/Sandbox/GetData', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    },
+                    body: JSON.stringify({ data: dataInput })
+                });
+                
+                const result = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Success!</strong><br>
+                        Message: ${result.message}<br>
+                        Received: ${result.receivedData.data}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong> ${error.message}
+                    </div>
+                `;
+            }
+        });
+
+        // Dynamic Content Loading
+        document.getElementById('loadContent').addEventListener('click', function() {
+            const contentDiv = document.getElementById('dynamicContent');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            contentDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <strong>Dynamic Content Loaded!</strong><br>
+                    Timestamp: ${timestamp}<br>
+                    This content was added without refreshing the page.
+                </div>
+            `;
+        });
+    </script>
+}

@@ -1,0 +1,288 @@
+@model SandboxApp.Models.AgentSelectorViewModel
+
+@{
+    ViewData["Title"] = "Agent Selector - Accordion Form";
+}
+
+<div class="container mt-4">
+    <h2>🦠 Agent Selector - Accordion Form</h2>
+    <p class="text-muted">Select agents from the categories below using multiple checkboxes</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <form asp-action="AgentSelector" method="post">
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Accordion Container -->
+                <div class="accordion" id="agentAccordion">
+                    
+                    <!-- VIRUSES Section -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#virusesCollapse">
+                                🦠 Viruses
+                            </button>
+                        </h2>
+                        <div id="virusesCollapse" class="accordion-collapse collapse show" data-bs-parent="#agentAccordion">
+                            <div class="accordion-body">
+                                <div class="btn-group mb-3" role="group">
+                                    <button type="button" class="btn btn-sm btn-success" onclick="selectAllInGroup('viruses')">
+                                        Select All
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="clearAllInGroup('viruses')">
+                                        Clear All
+                                    </button>
+                                </div>
+
+                                <div class="agent-group" id="viruses">
+                                    @foreach (var virus in Model.Viruses)
+                                    {
+                                        <div class="form-check">
+                                            <input 
+                                                type="checkbox" 
+                                                class="form-check-input agent-checkbox" 
+                                                name="SelectedAgentIds" 
+                                                value="@virus.Id"
+                                                id="virus_@virus.Id"
+                                                @(Model.FormModel.SelectedAgentIds.Contains(virus.Id) ? "checked" : "")
+                                            />
+                                            <label class="form-check-label" for="virus_@virus.Id">
+                                                <strong>@virus.Name</strong> - @virus.Description
+                                            </label>
+                                        </div>
+                                    }
+                                    @if (!Model.Viruses.Any())
+                                    {
+                                        <p class="text-muted">No viruses available</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TOXINS Section -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#toxinsCollapse">
+                                ☠️ Toxins
+                            </button>
+                        </h2>
+                        <div id="toxinsCollapse" class="accordion-collapse collapse" data-bs-parent="#agentAccordion">
+                            <div class="accordion-body">
+                                <div class="btn-group mb-3" role="group">
+                                    <button type="button" class="btn btn-sm btn-success" onclick="selectAllInGroup('toxins')">
+                                        Select All
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="clearAllInGroup('toxins')">
+                                        Clear All
+                                    </button>
+                                </div>
+
+                                <div class="agent-group" id="toxins">
+                                    @foreach (var toxin in Model.Toxins)
+                                    {
+                                        <div class="form-check">
+                                            <input 
+                                                type="checkbox" 
+                                                class="form-check-input agent-checkbox" 
+                                                name="SelectedAgentIds" 
+                                                value="@toxin.Id"
+                                                id="toxin_@toxin.Id"
+                                                @(Model.FormModel.SelectedAgentIds.Contains(toxin.Id) ? "checked" : "")
+                                            />
+                                            <label class="form-check-label" for="toxin_@toxin.Id">
+                                                <strong>@toxin.Name</strong> - @toxin.Description
+                                            </label>
+                                        </div>
+                                    }
+                                    @if (!Model.Toxins.Any())
+                                    {
+                                        <p class="text-muted">No toxins available</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BACTERIA Section -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bacteriaCollapse">
+                                🦠 Bacteria
+                            </button>
+                        </h2>
+                        <div id="bacteriaCollapse" class="accordion-collapse collapse" data-bs-parent="#agentAccordion">
+                            <div class="accordion-body">
+                                <div class="btn-group mb-3" role="group">
+                                    <button type="button" class="btn btn-sm btn-success" onclick="selectAllInGroup('bacteria')">
+                                        Select All
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="clearAllInGroup('bacteria')">
+                                        Clear All
+                                    </button>
+                                </div>
+
+                                <div class="agent-group" id="bacteria">
+                                    @foreach (var organism in Model.Bacteria)
+                                    {
+                                        <div class="form-check">
+                                            <input 
+                                                type="checkbox" 
+                                                class="form-check-input agent-checkbox" 
+                                                name="SelectedAgentIds" 
+                                                value="@organism.Id"
+                                                id="bacteria_@organism.Id"
+                                                @(Model.FormModel.SelectedAgentIds.Contains(organism.Id) ? "checked" : "")
+                                            />
+                                            <label class="form-check-label" for="bacteria_@organism.Id">
+                                                <strong>@organism.Name</strong> - @organism.Description
+                                            </label>
+                                        </div>
+                                    }
+                                    @if (!Model.Bacteria.Any())
+                                    {
+                                        <p class="text-muted">No bacteria available</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mt-3" role="alert"></div>
+                
+                <!-- Validation message for SelectedAgentIds -->
+                @if (Model.FormModel.SelectedAgentIds.Count == 0 && !ViewContext.ModelState.IsValid && ViewContext.ModelState.ContainsKey("FormModel.SelectedAgentIds"))
+                {
+                    <div class="alert alert-danger mt-2" role="alert">
+                        <span asp-validation-for="FormModel.SelectedAgentIds"></span>
+                    </div>
+                }
+
+                <!-- Additional Form Fields -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Additional Information</h5>
+
+                        <div class="mb-3">
+                            <label asp-for="FormModel.Reason" class="form-label"></label>
+                            <textarea asp-for="FormModel.Reason" class="form-control" rows="3" placeholder="Why are you selecting these agents?"></textarea>
+                            <span asp-validation-for="FormModel.Reason" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FormModel.Notes" class="form-label">Notes (Optional)</label>
+                            <textarea asp-for="FormModel.Notes" class="form-control" rows="3" placeholder="Any additional notes..."></textarea>
+                            <span asp-validation-for="FormModel.Notes" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="mt-4 d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="reset" class="btn btn-secondary">Reset Form</button>
+                    <button type="submit" class="btn btn-primary">Submit Selection</button>
+                </div>
+            </div>
+
+            <!-- Sidebar - Selection Summary -->
+            <div class="col-md-4">
+                <div class="card position-sticky" style="top: 20px;">
+                    <div class="card-header">
+                        <strong>📊 Selection Summary</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6>Viruses Selected</h6>
+                            <p id="virusCount" class="fs-5"><strong>0</strong></p>
+                        </div>
+                        <hr />
+                        <div class="mb-3">
+                            <h6>Toxins Selected</h6>
+                            <p id="toxinCount" class="fs-5"><strong>0</strong></p>
+                        </div>
+                        <hr />
+                        <div class="mb-3">
+                            <h6>Bacteria Selected</h6>
+                            <p id="bacteriaCount" class="fs-5"><strong>0</strong></p>
+                        </div>
+                        <hr />
+                        <div class="mb-3">
+                            <h6>Total Selected</h6>
+                            <p id="totalCount" class="fs-4 text-primary"><strong>0</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-link">← Back to Sandbox Home</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Get all checkboxes for a specific group
+        function getAllCheckboxesInGroup(groupId) {
+            const group = document.getElementById(groupId);
+            return group.querySelectorAll('input[type="checkbox"]');
+        }
+
+        // Select all checkboxes in a group
+        function selectAllInGroup(groupId) {
+            const checkboxes = getAllCheckboxesInGroup(groupId);
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateSelectionSummary();
+        }
+
+        // Clear all checkboxes in a group
+        function clearAllInGroup(groupId) {
+            const checkboxes = getAllCheckboxesInGroup(groupId);
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateSelectionSummary();
+        }
+
+        // Update the selection summary display
+        function updateSelectionSummary() {
+            const virusCheckboxes = getAllCheckboxesInGroup('viruses');
+            const toxinCheckboxes = getAllCheckboxesInGroup('toxins');
+            const bacteriaCheckboxes = getAllCheckboxesInGroup('bacteria');
+
+            const virusCount = Array.from(virusCheckboxes).filter(cb => cb.checked).length;
+            const toxinCount = Array.from(toxinCheckboxes).filter(cb => cb.checked).length;
+            const bacteriaCount = Array.from(bacteriaCheckboxes).filter(cb => cb.checked).length;
+            const totalCount = virusCount + toxinCount + bacteriaCount;
+
+            document.getElementById('virusCount').innerHTML = `<strong>${virusCount}</strong>`;
+            document.getElementById('toxinCount').innerHTML = `<strong>${toxinCount}</strong>`;
+            document.getElementById('bacteriaCount').innerHTML = `<strong>${bacteriaCount}</strong>`;
+            document.getElementById('totalCount').innerHTML = `<strong>${totalCount}</strong>`;
+        }
+
+        // Add event listeners to all checkboxes
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.agent-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateSelectionSummary);
+            });
+
+            // Initial update
+            updateSelectionSummary();
+        });
+    </script>
+}

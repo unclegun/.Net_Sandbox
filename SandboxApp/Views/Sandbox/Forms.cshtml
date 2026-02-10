@@ -1,0 +1,101 @@
+@model SandboxApp.Models.SampleFormModel
+
+@{
+    ViewData["Title"] = "Forms Sandbox";
+}
+
+<div class="container mt-4">
+    <h2>📝 Forms Sandbox</h2>
+    <p class="text-muted">Experiment with various form controls and validation</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="Forms" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter your name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" placeholder="your.email@example.com" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Age" class="form-label"></label>
+                            <input asp-for="Age" class="form-control" type="number" placeholder="18" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FavoriteColor" class="form-label">Favorite Color</label>
+                            <select asp-for="FavoriteColor" class="form-select">
+                                <option value="">-- Select a color --</option>
+                                <option value="Red">Red</option>
+                                <option value="Blue">Blue</option>
+                                <option value="Green">Green</option>
+                                <option value="Yellow">Yellow</option>
+                                <option value="Purple">Purple</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Comments" class="form-label"></label>
+                            <textarea asp-for="Comments" class="form-control" rows="4" placeholder="Enter your comments..."></textarea>
+                            <span asp-validation-for="Comments" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="AcceptTerms" class="form-check-input" />
+                            <label asp-for="AcceptTerms" class="form-check-label">I accept the terms and conditions</label>
+                            <span asp-validation-for="AcceptTerms" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Submit Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Form Features</strong>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">✓ Text inputs</li>
+                    <li class="list-group-item">✓ Email validation</li>
+                    <li class="list-group-item">✓ Number inputs</li>
+                    <li class="list-group-item">✓ Dropdowns</li>
+                    <li class="list-group-item">✓ Textareas</li>
+                    <li class="list-group-item">✓ Checkboxes</li>
+                    <li class="list-group-item">✓ Server-side validation</li>
+                    <li class="list-group-item">✓ Client-side validation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-link">← Back to Sandbox Home</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
